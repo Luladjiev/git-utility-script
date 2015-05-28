@@ -5,19 +5,30 @@ function refreshMaster {
     git pull
 }
 
+function getBranchName {
+    echo "$(git name-rev --name-only HEAD)"
+}
+
 case "$1" in
     "branch")
         if [[ "$2" != "" ]]; then
             refreshMaster
             git checkout -b $2
         else
-            echo "### Missing branch name argument ###"
+            echo "### Missing argument: branch name ###"
         fi
     ;;
     "rebase")
-        refreshMaster
-        git checkout -
-        git rebase
+        if [[ $(getBranchName) == "master" ]]; then
+            echo "####################################"
+            echo "### Error: Cannot rebase master! ###"
+            echo "####################################"
+            exit 0;
+        else
+            refreshMaster
+            git checkout -
+            git rebase master
+        fi
     ;;
     *)
         echo "### Invalid Option ###"
