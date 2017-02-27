@@ -17,7 +17,7 @@ case "$1" in
         else
             echo "### Missing argument: branch name ###"
         fi
-    ;;
+        ;;
     "rebase")
         if [[ $(getBranchName) == "master" ]]; then
             echo "####################################"
@@ -29,9 +29,12 @@ case "$1" in
             git checkout -
             git rebase master
         fi
+        ;;
+    "delete-branches")
+        git branch | grep -v "master" | xargs git branch -D
     ;;
     *)
         echo "### Invalid Option ###"
         exit 0
-    ;;
+        ;;
 esac
