@@ -31,7 +31,9 @@ case "$1" in
         fi
         ;;
     "delete-branches")
-        git branch | grep -v "master" | xargs git branch -D
+        git fetch -p
+        git branch -vv | grep -v "*" | grep ": gone]" | awk '{print $1}' | xargs git branch -D
+
     ;;
     *)
         echo "### Invalid Option ###"
